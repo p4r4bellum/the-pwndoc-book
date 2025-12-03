@@ -134,7 +134,7 @@ You must provide a Template name as well as a `docx`file:
 
 ![alt text](image-24.png)
 
-It's better to have a naming convention. What we use is something like \[your company name\] \[Audit Type\] Template \[language locale\] 
+It's better to have a naming convention. What we use is something like \[your company name\] \[Audit Type\] Template \[language locale\]
 
 ```text
 For example:
@@ -161,13 +161,74 @@ Congratulations !You have created your first Template within pwndoc-ng !
 We now create an "Audit Types". We usually create the following type of audit:
 
 - Web Application Pentest
+- Web Application Validation Audit
 - Source Code Audit
 - Active Directory Pentest
 - Wi-Fi Pentest
 
-For now, we will only create a "Web Application Pentest" type of Audit, using the template we have created in the previous section. To do so, navigate to `Custom Data` and click on the `Audit Types`tab:
+For now, we will only create a "Web Application Pentest" type of Audit, using the template we have created in the previous section. The `Web Application Validation Audit` is a special case we discuss later. To create an Audit Type, navigate to `Custom Data` and click on the `Audit Types`tab:
 
 ![alt text](image-28.png)
+
+Then, process as follow:
+
+- In the field name, put "Web Application Pentest" 
+- In the Drop Down List choose a template for each language. A Drop Down List will be created for each language. For now, whe have only one language and one template.
+- Leave the "Add Sections". We will talk about sections later.
+- Click the `Create`button.
+
+![alt text](image-31.png)
+
+Enjoy your first  "Audit Types" !
+
+![alt text](image-32.png)
+
+At this point you can create a new audit !
+
+#### Creating an Audit
+
+Click on the `New Audit`, you will be granted with a sort-of pop-up:
+
+![alt text](image-33.png)
+
+Give a name to your audit, following a clear naming convention. The one I used was YYYYMMDD-[Client Name]-[Application Name]. Skilled reader will say "Hey, we do not have any client yet!". Fair point. But to create an audit, no client is required. So we will create an audit named `20230229-SecureCorp-FakeApp`.
+
+![alt text](image-34.png)
+
+Choose the language (english, no choice) and the Audit Type (once again, no choice), and click on the `Créer` button - seems to have some issues with the internationalization of the app.
+
+Yes ! A new Audit was created !
+
+![alt text](image-35.png)
+
+Try to download it, and open it. You should see a bunch of "undefined" text, because these properties are not set in our audit.
+
+![alt text](image-36.png)
+
+Let's fix that by editing our audit. Double-click on its name or click on th  `edit` icon.
+
+![alt text](image-37.png)
+
+Notice the empty fields. They cause the text "undefined" to rendered in the generated document.
+We cannot fix all the issues here, because we have no clients, we have no company, nothing. Before creating these business objects, let's describe the view, corresponding to the general properties of an audit:
+
+![alt text](image-38-1.png)
+
+1. The name of the audit, with its type between parentheses
+2. The section "General Information". The current section is greyed.
+3. The network scan section. Here, you can upload an NMAP style XML file.
+4. The findings sections. This section contain all the vulnerabilities discovered during an audit
+5. The name of the audit, following a very good naming convention
+6. The language of the audit. You can change it, but think to update the Template property too
+7. The template used to generate the docx file. You can update it.
+8. The company who ask to be P0wned
+9. The individual within the company who asked to be P0wned. It is usually the audit sponsor
+10. The list of collaborators involved in the current audit. The creator of the audit is always a collaborator. Other collaborator must be created in the application.
+11. The start date of the audit. Should be known
+12. The end date of the audit. Should be known
+13. The reporting date, when you send the report to your client. Even if you don't know the date precisely, it's better to put one. No check is performed to see if the report date is before the start of the audit.
+14. The scopes audited. For a Web Application Pentest, is mainly a list of url or domain à la bug bounty.
+15. The list of  users connected to the application
 
 
 #### The Docker Engine
@@ -1504,6 +1565,34 @@ Use in template document
 {@findings | barChart:'vulnType':'My bar chart'}
 {@findings | barChart:'cvss.baseSeverity':'My chart':'FF0000':'AABB00':'1500'}
 ```
+
+##### Custom Charts
+
+Before using pwndoc-ng, we used other mean to craft our pentest reports, and we used two charts we deemed valuable.
+
+Theses charts was generated using VBA Macro. To not face issue with these macro, we simply decided to get rid of them, and put our hand dirty by taking a look a the pwndoc-ng source code as well as in the XML of our old reports (not containg clients data of course. Remember to delete your old reports ^^ ). The VBA macro we used won't work outside a Windows machine because they use COM object.
+
+So we are proud to share with you two custom filters building these charts:
+
+![alt text](image-29.png)
+
+![alt text](image-30.png)
+
+Remember you have to patch the `pwndoc-ng/backend/src/lib/report-generator.js` with the pact mentionned somewhere in this document
+
+Use in template
+
+```text
+// stacked bar chart
+{@findings | stackedBarChart:'Number of Vulnerability by Risk Level':'cc0500':'df3d03':'f9a009':'ffcb0d'}
+
+// security based on the weakest link chart
+{@findings | weakestLinkChart:'Security Level based on the Weakest Link':'cc0500':'df3d03':'f9a009':'ffcb0d'}
+```
+
+Note that using these filter without patching the source code raises an error.
+
+For now, the patch does not take vulnerability prefix into account. The screenshots you see above is the result of an hand-made update of the data.
 
 #### bookmarkCreate
 
