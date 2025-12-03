@@ -255,7 +255,78 @@ Fill the required fields.
 ![alt text](image-42.png)
 
 1. The company. You have only one so easy choice
-#### The Docker Engine
+2. First Name
+3. Last name
+4. Email
+5. Function
+6. Phone number
+7. Cell phone number
+
+Our brand new client will be created with the following data:
+
+![alt text](image-43.png)
+
+Congratulations for having successfully created a new client !
+
+![alt text](image-44.png)
+
+#### Fixing the Audit (1)
+
+Go back to the audit created earlier, and update the fields accordingly :
+
+![alt text](image-45.png)
+
+Notice we update the Title of the audit to match our naming convention YYYYMMDD-\[Company Name\]-\[Application Name\]. Click the `save` button and download the report. The "undefined" pandemic should be fixed.
+
+![alt text](image-46.png)
+
+Nice !But what about vulnerabilities ?
+
+#### Creating Vulnerabilities
+
+##### Manually
+
+Painful. I'll describe it later
+
+##### Importing Vulnerabilities
+
+Some good guys share their vulnerabilities to be imported in pwndoc-ng. You can find a list of vulnerabilities in the french and english language at <https://gist.githubusercontent.com/p4r4bellum/7dc17ccc70558176155bfa0264d44a4a/raw/011e1f9cfbcfd55a79faffeec81f97c0baf7c2c7/20251120-vulnerabilities.yml>.
+
+Download the files using whatever method you prefer. As I am in a Virtual Machine with a GUI, I'll be lazy and download the list using the Chrome Browser.
+
+![alt text](image-47.png)
+
+`Ctrl+s`powa
+
+![alt text](image-48.png)
+
+Navigate to <https://localhost:8443/data/dump>, click the `import` button, and select the YAML file you have just downloaded:
+
+![alt text](image-49.png)
+
+The import should be fine. Go to <https://localhost:8443/vulnerabilities> to see all the vulnerabilities imported:
+
+![alt text](image-50.png)
+
+The import also created several vulnerability categories :
+
+![alt text](image-51.png)
+
+Something strange happens, however. We cannot see the french version of the vulnerabilities, because the french language does not exist within pwndoc-ng.
+
+So create a language `français` with the locale `fr`. The locale must match the locale found in the YAML file:
+
+![alt text](image-52.png)
+
+You know how to create a language, I won't repeat.
+
+![alt text](image-53.png)
+
+No go back to the list of vulnerabilities, you should see the french version of the vulnerabilities.
+
+![alt text](image-54.png)
+
+#### The Docker Engin
 
 See below.
 
