@@ -230,7 +230,31 @@ We cannot fix all the issues here, because we have no clients, we have no compan
 14. The scopes audited. For a Web Application Pentest, is mainly a list of url or domain à la bug bounty.
 15. The list of  users connected to the application
 
+#### Creating a Company
 
+Navigate to <https://[ip or domain]:8443/data/comapnies> and click on the `Add Company` button:
+
+![alt text](image-39.png)
+
+Only `Name` is mandatory, but you can give the company a `Short name` (useful if the real company name is way tooooooo long), an address, a Postal code , a City and a Logo. The Company logo can be then used in the rendered document. Be aware that the rendering of the document can be be severely altered depending on the size of the logo, so it's better to have the same image size for all your company logos.
+
+![alt text](image-40.png)
+
+The title of the pop-up is `Edit Company` because I click to quickly on the `Create` button, but you got the point. So, I will click `Update` instead of `Create`, not really a big deal.
+
+Be proud for having created the `P0wnMe Corp` !
+
+#### Creating a Client
+
+Navigate to <https://localhost:8443/data/clients> and click the `Add Client` button.
+
+![alt text](image-41.png)
+
+Fill the required fields.
+
+![alt text](image-42.png)
+
+1. The company. You have only one so easy choice
 #### The Docker Engine
 
 See below.
