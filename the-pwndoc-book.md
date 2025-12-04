@@ -426,6 +426,10 @@ No go back to the list of vulnerabilities, you should see the french version of 
 
 ![alt text](image-54.png)
 
+### Fixing the audit (2)
+
+Edit the audit
+
 ## pwndoc-ng in production
 
 All 3 containers can be run at once using the `docker-compose` file in the root directory.
