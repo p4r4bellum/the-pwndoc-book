@@ -780,7 +780,7 @@ sudo docker-compose -f backend/docker-compose.dev.yml start
 sudo docker-compose -f backend/docker-compose.dev.yml down
 ```
 
-Application is accessible through <https://localhost:8081> API is accessible through <https://localhost:8081/api>, granted there is GUI available on your local machine. For the sake of development, we strongly suggest to setup Pwndoc on a local development machine using Docker Desktop.
+Application is accessible through <https://localhost:8081> API is accessible through <https://localhost:8081/api>, granted there is GUI available on your local machine. For the sake of development, we strongly suggest to setup pwndoc-ng on a local development machine using Docker Desktop.
 
 ## Tests
 
