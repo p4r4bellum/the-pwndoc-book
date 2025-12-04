@@ -418,13 +418,11 @@ No go back to the list of vulnerabilities, you should see the french version of 
 
 ![alt text](image-54.png)
 
-
-
-### Production
+## pwndoc-ng in production
 
 All 3 containers can be run at once using the `docker-compose` file in the root directory.
 
-#### SSL Certificates
+### SSL Certificates
 
 For production usage make sure to change the certificates in frontend/ssl folder, otherwise anybody and his mother can decrypt or tamper the SSL traffic as the private key used by default is available on github. The public server key file must be named `server.cert`and the server private key file must be named `server.key` because these files names are hardcoded in pwndoc-ng.
 
@@ -436,36 +434,36 @@ Nonetheless, you can use your own certificate by performing the following steps:
 2. two
 3. three
 
-#### Custom JWT Secret
+### Custom JWT Secret
 
 You can set the JWT secret in `backend/src/lib/auth.js` (jwtSecret and jwtRefreshSecret in `backend/src/config/config.json`) if you don't want to use random ones.
 
-#### Build and run Docker containers
+### Build and run Docker containers
 
 ```bash
 sudo docker-compose up -d --build
 ```
 
-#### Display backend container logs
+### Display backend container logs
 
 ```bash
 sudo docker-compose logs -f backend
 ```
 
-#### Stop/Start containers
+### Stop/Start containers
 
 ```bash
 sudo docker-compose stop
 sudo docker-compose start
 ```
 
-#### Remove containers
+### Remove containers
 
 ```bash
 sudo docker-compose down
 ```
 
-#### Update
+### Update
 
 ```bash
 sudo docker-compose down
@@ -475,100 +473,11 @@ sudo docker-compose up -d --build
 
 Application is accessible through <https://localhost:8443> API is accessible through <https://localhost:8443/api>, granted there is a GUI on your local machine.
 
-### Development
-
-For development purposes, specific `docker-compose` file can be used in each folder (backend/frontend).
-
-*Source code can be modified live and application will automatically reload on changes.*
-
-#### Build and run backend and database containers during development
-
-```bash
-sudo docker-compose -f backend/docker-compose.dev.yml up -d --build
-```
-
-#### Display backend container logs during development
-
-```bash
-sudo docker-compose -f backend/docker-compose.dev.yml logs -f pwndoc-ng-backend
-```
-
-#### Stop/Start containers during development
-
-```bash
-sudo docker-compose -f backend/docker-compose.dev.yml stop
-sudo docker-compose -f backend/docker-compose.dev.yml start
-```
-
-#### Remove containers during development
-
-```bash
-sudo docker-compose -f backend/docker-compose.dev.yml down
-```
-
-Application is accessible through <https://localhost:8081> API is accessible through <https://localhost:8081/api>, granted there is GUI available on your local machine. For the sake of development, we strongly suggest to setup Pwndoc on a local development machine using Docker Desktop.
-
-### Tests
-
-For now only backend tests have been written (it's a continuous work in progress)
-
-Test files are located in `backend/tests` using Jest testing framework
-
-Script `run_tests.sh` at the root folder can be used to launch tests :
-
-```bash
-Usage:        ./run_tests.sh -q|-f [-h, --help]
-
-Options:
-  -h, --help  Display help
-  -q          Run quick tests (No build)
-  -f          Run full tests (Build with no cache)
-```
-
-Don't use it in production as it will delete the production Database !
-
-### First Time Setup And Configuration
-
-TODO
-
-#### Creating the superuser
-
-TODO
-
-#### Creating Language
-
-TODO
-
-#### Creating Template
-
-TODO
-
 ### Backup
 
 It's possible, even recommended, to regularly backup the mongo-data volume. It contains all the database. Cold backups are preferred as consistency is (almost) guaranteed.
 
 #### Same Server backup (bad idea)
-
-Find the location of the volume on the disk:
-
-```bash
-sudo docker inspect pwndoc-ng_mongo-data
-[
-    {
-        "CreatedAt": "2022-09-18T19:11:42+02:00",
-        "Driver": "local",
-        "Labels": {
-            "com.docker.compose.project": "pwndoc-ng",
-            "com.docker.compose.version": "2.11.0",
-            "com.docker.compose.volume": "mongo-data"
-        },
-        "Mountpoint": "/var/lib/docker/volumes/pwndoc-ng_mongo-data/_data",
-        "Name": "pwndoc-ng_mongo-data",
-        "Options": null,
-        "Scope": "local"
-    }
-]
-```
 
 To backup the mongo db database, run
 
@@ -597,6 +506,8 @@ sudo docker run --rm \
   sh -c "tar cvf /backup/$(date +%Y%m%d-%H%M)_pwndoc-db_backup.tar /_data"
 ```
 
+#### Database restoration
+
 To restore from a backup, run:
 
 ```bash
@@ -614,9 +525,50 @@ The command `sudo docker run --rm -v pwndoc-ng_mongo-data:/_data -v /tmp:/backup
 - `busybox``` : lightweight Linux image with tar.
 - `tar cvf /backup/pwndoc-db_backup.tar /_data` : create (c) a verbose (v) archive file (f) named `pwndoc-db_backup.tar` inside `/backup` (host `/tmp`), containing the contents of `/_data` (MongoDB volume).
 
+Of  course, you have to use the proper name of your backup archive.
+
 #### Crontabbing the backup
 
-TODO
+On a production machine, we planned to backup the data on the first wednesday of each month.
+
+```bash
+sudo crontab -e
+```
+
+![alt text](image-55.png)
+
+Add the line `0 23 1-7 * 3 /usr/bin/pwndoc-ng-backup.sh`. The script `/usr/bin/pwndoc-ng-backup.sh`
+will deal with the backup. You have to create this script and grant it the execute permission.
+
+```bash
+# create the folder hierarchy used by the backup process
+sudo mkdir -p /backup/pwndoc-ng-data
+```
+
+```bash
+#! /bin/bash
+# perform a backup of the mongo db pwndoc data
+# stop the container
+sudo docker-compose -f /app/pwndoc-ng/docker-compose.yml stop
+# backup the database file and archive it in the /backup/pwndoc-ng-data/ folder
+# this way, you have at least a local backup
+# DO NOT FORGET TO CREATE THESE FOLDERS !
+sudo docker run --rm   -v pwndoc-ng_mongo-data:/_data   -v /backup/pwndoc-ng-data:/backup   busybox   sh -c "tar cvf /backup/$(date +%Y%m%d-%H%M)_pwndoc-db_backup.tar /_data"
+# restart the container
+sudo docker-compose -f /app/pwndoc-ng/docker-compose.yml start
+# synchronize the folder using one drive
+# sudo onedrive --synchronize --upload-only
+```
+
+```bash
+sudo chmod +x /usr/bin/pwndoc-ng-backup.sh
+```
+
+If everything is going fine, you will end up with a tar archive :
+
+![alt text](image-56.png)
+
+This script is absolutely minimal, and should be improved, by adding logging message and check for errors.
 
 #### OneDrive Backup of pwndoc mongodb data
 
@@ -642,8 +594,6 @@ Now you have the OneDrive client on your server, it’s time to connect it to On
 ```bash
 onedrive
 ```
-
-[sync linux onedrive]
 
 Once you have logged in to OneDrive you will see a black page. This is normal. Look at the URL and copy the entire URL in the browser address bar to the console.
 
@@ -799,9 +749,59 @@ sudo docker-compose -f /app/pwndoc-ng/docker-compose.yml start
 sudo onedrive --synchronize --upload-only
 ```
 
-### Using a reverse proxy/application gateway
+## Development
 
-## Data
+For development purposes, specific `docker-compose` file can be used in each folder (backend/frontend).
+
+*Source code can be modified live and application will automatically reload on changes.*
+
+### Build and run backend and database containers during development
+
+```bash
+sudo docker-compose -f backend/docker-compose.dev.yml up -d --build
+```
+
+### Display backend container logs during development
+
+```bash
+sudo docker-compose -f backend/docker-compose.dev.yml logs -f pwndoc-ng-backend
+```
+
+### Stop/Start containers during development
+
+```bash
+sudo docker-compose -f backend/docker-compose.dev.yml stop
+sudo docker-compose -f backend/docker-compose.dev.yml start
+```
+
+### Remove containers during development
+
+```bash
+sudo docker-compose -f backend/docker-compose.dev.yml down
+```
+
+Application is accessible through <https://localhost:8081> API is accessible through <https://localhost:8081/api>, granted there is GUI available on your local machine. For the sake of development, we strongly suggest to setup Pwndoc on a local development machine using Docker Desktop.
+
+## Tests
+
+For now only backend tests have been written (it's a continuous work in progress)
+
+Test files are located in `backend/tests` using Jest testing framework
+
+Script `run_tests.sh` at the root folder can be used to launch tests :
+
+```bash
+Usage:        ./run_tests.sh -q|-f [-h, --help]
+
+Options:
+  -h, --help  Display help
+  -q          Run quick tests (No build)
+  -f          Run full tests (Build with no cache)
+```
+
+Don't use it in production as it will delete the production Database !
+
+## Business Objects used by pwndoc-ng
 
 This section is heavily inspired by the corresponding one found in the official pwndoc-ng documentation.
 
