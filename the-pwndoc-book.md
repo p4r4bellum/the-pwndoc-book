@@ -9,7 +9,7 @@ pwndoc-ng is a containerized application, so the Docker Engine is required to ru
 
 ### Pwndoc-ng on Windows using Docker Desktop
 
-#### Docker Desktop
+#### Getting Docker Desktop
 
 Guess what? Sometimes you will have to debug the software or ass some new cool features, as I painfully did. To do so, the easiest way is to install Docker Desktop on your powerful laptop. Take a browser and navigate to <https://www.docker.com/products/docker-desktop/> and download the suitable version for whatever Operating System you waste your time on. Docker Compose is bundled with Docker Desktop so don't need to install it.
 
@@ -17,7 +17,7 @@ Guess what? Sometimes you will have to debug the software or ass some new cool f
 
 Whoops, on Windows, I forgot to talk about WSL (Windows Subsystem for Linux). Docker Desktop won't run on Windows without it. Fortunately, the good guys and gals at Docker tell you what are the steps to follow. Just go to <https://docs.docker.com/desktop/setup/install/windows-install/> and you're good to go.
 
-#### Git
+#### Getting Git
 
 Yeah fine, no you need a Git client to get Pwndoc files. As I used Windows, I just installed the Git Bash Software from <https://git-scm.com/install/windows>.
 
@@ -33,7 +33,7 @@ Something like that should pop-up:
 
 Otherwise, stop working in IT and apply for an AI enhanced cashier job.
 
-#### MongoDB Compass and Mongosh
+#### Getting MongoDB Compass and Mongosh
 
 To manage the Mongo DB database, we installed locally the Mongo DB Compass tool from <https://www.mongodb.com/products/tools/compass> as well as the Mongo Shell mongosh from <https://www.mongodb.com/try/download/shell>. Remember, buttons are for idiots. This quote is from the OpenBSD project founder, so...
 
@@ -69,9 +69,6 @@ Accept the security risk. If the Pwndoc database is empty, you will be prompted 
 
 ![alt text](image-5.png)
 
-#### Caveat
-
-- Do not forget to patch the file `pwndoc-ng/backend/src/lib/report-generator.js` by appending the file you can find at <https://gist.githubusercontent.com/p4r4bellum/c333102c9356d41a6eb97038eb9bad32/raw/ec0375883975ec096a358e7de98c5cc61f6dd7eb/fruisek-pwndoc-patch.js>
 
 ### Ubuntu Virtual Machine
 
@@ -92,7 +89,13 @@ Accept the security risk; you are now rewarded with the first time use GUI. Noti
 
 ![alt text](image-16.png)
 
-#### First User Registration
+## pwndoc-ng configuration
+
+### Caveat
+
+If you ant to use our custom charts described later, do not forget to patch the file `pwndoc-ng/backend/src/lib/report-generator.js` by appending the file you can find at <https://gist.githubusercontent.com/p4r4bellum/c333102c9356d41a6eb97038eb9bad32/raw/ec0375883975ec096a358e7de98c5cc61f6dd7eb/fruisek-pwndoc-patch.js>
+
+### First User Registration
 
 You have to create the first user, which will be admin. Pick-up any username you want. Choose a strong password, put your first name and last name and the click "Register First User". Notice that the GUI won't ask you to confirm your password.
 
@@ -100,7 +103,7 @@ We created the "Al BEBACK" user.
 
 ![alt text](image-17.png)
 
-#### Creating and Updating a Language
+### Creating and Updating a Language
 
 Now, you must create a language.
 
@@ -120,7 +123,7 @@ But it's a little be weird, so we update this language to rename it as "english"
 
 Click on the "save" button and your language is updated.
 
-#### Creating a Template
+### Creating a Template
 
 Before creating an "Audit Type", you must create a template. Creating a template requires a name and `docx` file. You can find a default docx template in the `backend/report-templates` directory:
 
@@ -156,7 +159,7 @@ Congratulations !You have created your first Template within pwndoc-ng !
 
 ![alt text](image-27.png)
 
-#### Creating an Audit Type
+### Creating an Audit Type
 
 We now create an "Audit Types". We usually create the following type of audit:
 
@@ -185,7 +188,7 @@ Enjoy your first  "Audit Types" !
 
 At this point you can create a new audit !
 
-#### Creating an Audit
+### Creating an Audit
 
 Click on the `New Audit`, you will be granted with a sort-of pop-up:
 
@@ -230,7 +233,7 @@ We cannot fix all the issues here, because we have no clients, we have no compan
 14. The scopes audited. For a Web Application Pentest, is mainly a list of url or domain à la bug bounty.
 15. The list of  users connected to the application
 
-#### Creating a Company
+### Creating a Company
 
 Navigate to <https://[ip or domain]:8443/data/comapnies> and click on the `Add Company` button:
 
@@ -244,7 +247,7 @@ The title of the pop-up is `Edit Company` because I click to quickly on the `Cre
 
 Be proud for having created the `P0wnMe Corp` !
 
-#### Creating a Client
+### Creating a Client
 
 Navigate to <https://localhost:8443/data/clients> and click the `Add Client` button.
 
@@ -270,7 +273,7 @@ Congratulations for having successfully created a new client !
 
 ![alt text](image-44.png)
 
-#### Fixing the Audit (1)
+### Fixing the Audit (1)
 
 Go back to the audit created earlier, and update the fields accordingly :
 
@@ -282,13 +285,13 @@ Notice we update the Title of the audit to match our naming convention YYYYMMDD-
 
 Nice !But what about vulnerabilities ?
 
-#### Creating Vulnerabilities
+### Creating Vulnerabilities
 
-##### Manually
+#### Manually
 
 Painful. I'll describe it later
 
-##### Importing Vulnerabilities
+#### Importing Vulnerabilities
 
 Some good guys share their vulnerabilities to be imported in pwndoc-ng. You can find a list of vulnerabilities in the french and english language at <https://gist.githubusercontent.com/p4r4bellum/7dc17ccc70558176155bfa0264d44a4a/raw/011e1f9cfbcfd55a79faffeec81f97c0baf7c2c7/20251120-vulnerabilities.yml>.
 
@@ -326,10 +329,6 @@ No go back to the list of vulnerabilities, you should see the french version of 
 
 ![alt text](image-54.png)
 
-#### The Docker Engin
-
-See below.
-
 ### Cloud-based Ubuntu Virtual Machine
 
 Having a pwndoc-ng instance running on your local pentesting machine can be cool, but you certainly want to be able to collaborate. What other great way than popping a Virtual Machine to do so?
@@ -337,6 +336,8 @@ Having a pwndoc-ng instance running on your local pentesting machine can be cool
 You must restrict the access to the running instance for obvious security reasons. You don't want this guy from hostile part of the world accessing precious data. Nothing dumber than a security related product without security enforced.
 
 #### Azure-based Virtual Machine
+
+Refer to the official Microsoft documentation to create an Ubuntu VM 
 
 #### AWS-based Virtual Machine
 
