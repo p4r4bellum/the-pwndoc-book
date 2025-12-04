@@ -39,7 +39,7 @@ To manage the Mongo DB database, we installed locally the Mongo DB Compass tool 
 
 Note that you can manage the pwndoc-ng Mongo Database without installing any tool, but you won't have a nice GUI. See relevant **FIXME**
 
-#### Downloading and Running Pwndoc
+#### Downloading and Running pwndoc-ng
 
 Because of my long career in IT, I created the folder `bin` in my home directory, even if I'm on a Windows. Use any methods that is suitable for you. You can of course use any folder hierarchy.
 
@@ -65,10 +65,41 @@ docker-compose up -d --build
 
 ![alt text](image-4-1.png)
 
-Accept the security risk. If the Pwndoc database is empty, you will be prompted to create an admin user. Sorry, no screenshot available for a first time install, I need to keep my local database, but here is a screenshot from a running local Pwndoc instance:
+Accept the security risk. If the pwndoc-ng database is empty, you will be prompted to create an admin user. Sorry, no screenshot available for a first time install, I need to keep my local database, but here is a screenshot from a running local pwndoc-ng instance:
 
 ![alt text](image-5.png)
 
+### Docker Engine Installation
+
+Nothing fancy here, just follow the step on the official Docker website (<https://docs.docker.com/engine/install/ubuntu/>). Be sure to follow the post-installations step (<https://docs.docker.com/engine/install/linux-postinstall/>) if you do not want to type `sudo docker-compose`or `sudo docker something` each time.
+
+No need to tell you to perform the mandatory stuff before:
+
+```bash
+sudo apt-get update && sudo apt-get upgrade
+```
+
+If you are in the mood of burning bandwidth a
+
+```bash
+sudo apt-get dist-upgrade
+```
+
+will make your day. You can now install the Docker engine using the urls previously mentioned.
+
+Should work for any Ubuntu underlying platform, be it a local Virtual Machine or Acloud-based one.
+
+### File System Folder Layout for pwndoc-ng
+
+I know,I know ,Kubernetes is everything now for application deployment, but guess what? It was faster and easier to install pwndoc-ng on a virtual machine because the learning curve was non-existent.
+
+The required files for running pwndoc-ng should be put in the folder `/app`. This directory does not exist by default, so you will have to use your fingers (copy/paste should work too) to enter the following command:
+
+```bash
+sudo mkdir /app
+```
+
+But if you want to use another layout such as `/EA000000FFFAC3/`, be my guest.
 
 ### Ubuntu Virtual Machine
 
@@ -89,15 +120,73 @@ Accept the security risk; you are now rewarded with the first time use GUI. Noti
 
 ![alt text](image-16.png)
 
+### Cloud-based Ubuntu Virtual Machine
+
+Having a pwndoc-ng instance running on your local pentesting machine can be cool, but you certainly want to be able to collaborate. What other great way than popping a Virtual Machine to do so?
+
+You must restrict the access to the running instance for obvious security reasons. You don't want this guy from hostile part of the world accessing precious data. Nothing dumber than a security related product without security enforced.
+
+#### Azure-based Virtual Machine
+
+Refer to the official Microsoft documentation to create an Ubuntu VM. We use a 2 vCPU with 8 Go RAM
+and it worked just fine.
+
+#### AWS-based Virtual Machine
+
+Refer to the official AWS documentation to create an Ubuntu VM. We use a 2 vCPU with 8 Go RAM
+and it worked just fine. (yeah, copy-paste)
+
+### Cloning the pwndoc-ng repository
+
+Imagine you are a pianist, in front of your keyboard. You are logged in the Ubuntu virtual machine. You start by typing
+
+```bash
+sudo cd /app
+```
+
+Take a deep breath. Now type the following
+
+```bash
+sudo git clone https://github.com/pwndoc-ng/pwndoc-ng.git
+```
+
+You hear a voice in the dark saying that running git as root is not a good idea, but who cares?
+Of course, if an error message  such as
+
+```bash
+git: command not found
+```
+
+pop up, well, I don't know, maybe try to install git:
+
+```bash
+sudo apt-get update && sudo apt-get install git
+```
+
+Typing the following command will build an d run the containers.
+
+```bash
+cd /app/pwndoc-ng && sudo docker-compose up -d --build
+```
+
 ## pwndoc-ng configuration
 
 ### Caveat
 
 If you ant to use our custom charts described later, do not forget to patch the file `pwndoc-ng/backend/src/lib/report-generator.js` by appending the file you can find at <https://gist.githubusercontent.com/p4r4bellum/c333102c9356d41a6eb97038eb9bad32/raw/ec0375883975ec096a358e7de98c5cc61f6dd7eb/fruisek-pwndoc-patch.js>
 
+```bash
+curl -L https://gist.githubusercontent.com/p4r4bellum/c333102c9356d41a6eb97038eb9bad32/raw/ec0375883975ec096a358e7de98c5cc61f6dd7eb/fruisek-pwndoc-patch.js -o /tmp/patch.js
+sudo su - 
+cat /tmp/patch.js >> /app/pwndoc-ng/backend/src/lib/report-generator.js
+exit
+```
+
+You have to apply the patch before building the containers.
+
 ### First User Registration
 
-You have to create the first user, which will be admin. Pick-up any username you want. Choose a strong password, put your first name and last name and the click "Register First User". Notice that the GUI won't ask you to confirm your password.
+With a brand new installation, you have to create the first user, which will be admin. Pick-up any username you want. Choose a strong password, put your first name and last name and the click "Register First User". Notice that the GUI won't ask you to confirm your password.
 
 We created the "Al BEBACK" user.
 
@@ -329,91 +418,7 @@ No go back to the list of vulnerabilities, you should see the french version of 
 
 ![alt text](image-54.png)
 
-### Cloud-based Ubuntu Virtual Machine
 
-Having a pwndoc-ng instance running on your local pentesting machine can be cool, but you certainly want to be able to collaborate. What other great way than popping a Virtual Machine to do so?
-
-You must restrict the access to the running instance for obvious security reasons. You don't want this guy from hostile part of the world accessing precious data. Nothing dumber than a security related product without security enforced.
-
-#### Azure-based Virtual Machine
-
-Refer to the official Microsoft documentation to create an Ubuntu VM 
-
-#### AWS-based Virtual Machine
-
-#### Docker Engine Installation
-
-Nothing fancy here, just follow the step on the official Docker website (<https://docs.docker.com/engine/install/ubuntu/>). Be sure to follow the post-installations step (<https://docs.docker.com/engine/install/linux-postinstall/>) if you do not want to type `sudo docker-compose`or `sudo docker something` each time.
-
-No need to tell you to perform the mandatory stuff before:
-
-```bash
-sudo apt-get update && sudo apt-get upgrade
-```
-
-If you are in the mood of burning bandwidth a
-
-```bash
-sudo apt-get dist-upgrade
-```
-
-will make your day. You can now install the Docker engine using the urls previously mentioned.
-
-#### Ubuntu Virtual Machine Folder Layout
-
-I know,I know ,Kubernetes is everything now for application deployment, but guess what? It was faster and easier to install pwndoc-ng on a virtual machine because the learning curve was non-existent.
-
-The required files for running pwndoc-ng should be put in the folder `/app`. This directory does not exist by default, so you will have to use your fingers (copy/paste should work too) to enter the following command:
-
-```bash
-sudo mkdir /app
-```
-
-But if you want to use another layout such as `/EA000000FFFAC3/`, be my guest.
-
-#### Overture
-
-Imagine you are a pianist, in front of your keyboard. You are logged in the Ubuntu virtual machine. You start by typing
-
-```bash
-sudo cd /app
-```
-
-Take a deep breath. Now type the following
-
-```bash
-sudo git clone https://github.com/pwndoc-ng/pwndoc-ng.git
-```
-
-You hear a voice in the dark saying that running git as root is not a good idea, but who cares?
-Of course, if an error message  such as
-
-```bash
-git: command not found
-```
-
-pop up, well, I don't know, maybe try to install git:
-
-```bash
-sudo apt-get update && sudo apt-get install git
-```
-
-Before jumping, excited and type another command such as
-
-```bash
-cd /app/pwndoc-ng && sudo docker-compose up -d --build
-```
-
-to build and run the containers, you have to apply a patch to the source code. The patch is required to use the docx report templates, as custom filters are used. If it does not sound clear for you, not that I don't care, but I know you can go to <https://pwndoc-ng.github.io/pwndoc-ng/#/> to read the full pwndoc-ng documentation.
-
-Now the second movement comes into play. Enter the following command:
-
-```bash
-curl -L https://gist.githubusercontent.com/p4r4bellum/c333102c9356d41a6eb97038eb9bad32/raw/ec0375883975ec096a358e7de98c5cc61f6dd7eb/fruisek-pwndoc-patch.js -o /tmp/patch.js
-sudo su - 
-cat /tmp/patch.js >> /app/pwndoc-ng/backend/src/lib/report-generator.js
-exit
-```
 
 ### Production
 
