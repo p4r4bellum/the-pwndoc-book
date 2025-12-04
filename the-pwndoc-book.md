@@ -428,7 +428,26 @@ No go back to the list of vulnerabilities, you should see the french version of 
 
 ### Fixing the audit (2)
 
-Edit the audit
+Edit the audit to add a vulnerability, because you juast have found a Cross-Site Scrpting vulnerability in the application you are testing.Click on the green `+` button:
+
+![alt text](image-57.png)
+
+You can see all the vulnerabilities that was imported:
+
+![alt text](image-58.png)
+
+In the search box, type `xss`
+
+![alt text](image-59.png)
+
+Click on the grey `+`. A vulnerability entry is added in the `Findings` section of the audit.  
+
+![alt text](image-60.png)
+
+Notice that our vulnerability has a blue `N` tag attached to it. It means this vulnerability has no CVSS score by default.
+
+The description field and the references field are the only one filled.
+
 
 ## pwndoc-ng in production
 
