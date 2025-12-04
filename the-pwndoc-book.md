@@ -69,6 +69,20 @@ Accept the security risk. If the pwndoc-ng database is empty, you will be prompt
 
 ![alt text](image-5.png)
 
+Done for the Windows installation using Docker Desktop. It was so good !
+
+### File System Folder Layout for pwndoc-ng
+
+I know,I know ,Kubernetes is everything now for application deployment, but guess what? It was faster and easier to install pwndoc-ng on a virtual machine because the learning curve was non-existent.
+
+The required files for running pwndoc-ng should be put in the folder `/app`. This directory does not exist by default, so you will have to use your fingers (copy/paste should work too) to enter the following command:
+
+```bash
+sudo mkdir /app
+```
+
+But if you want to use another layout such as `/EA000000FFFAC3/`, be my guest.
+
 ### Docker Engine Installation
 
 Nothing fancy here, just follow the step on the official Docker website (<https://docs.docker.com/engine/install/ubuntu/>). Be sure to follow the post-installations step (<https://docs.docker.com/engine/install/linux-postinstall/>) if you do not want to type `sudo docker-compose`or `sudo docker something` each time.
@@ -87,54 +101,7 @@ sudo apt-get dist-upgrade
 
 will make your day. You can now install the Docker engine using the urls previously mentioned.
 
-Should work for any Ubuntu underlying platform, be it a local Virtual Machine or Acloud-based one.
-
-### File System Folder Layout for pwndoc-ng
-
-I know,I know ,Kubernetes is everything now for application deployment, but guess what? It was faster and easier to install pwndoc-ng on a virtual machine because the learning curve was non-existent.
-
-The required files for running pwndoc-ng should be put in the folder `/app`. This directory does not exist by default, so you will have to use your fingers (copy/paste should work too) to enter the following command:
-
-```bash
-sudo mkdir /app
-```
-
-But if you want to use another layout such as `/EA000000FFFAC3/`, be my guest.
-
-### Ubuntu Virtual Machine
-
-Repeat after me : redundancy in a book is boring and unappealing, that's why I document the installation of pwndoc-ng on an Ubuntu Virtual Machine using Virtual Box on a Windows 11 Professional. The one who shout "Hyper-V" must eat a rotten stone.
-
-Joke aside, I need some screenshots of the whole process of installing pwndoc-ng, and fire-up an instance in a Virtual Machine is the way I found to provide you with pictures.
-
-Notice that the installation will mimic the GUI less installation, so we won't use Docker Desktop.
-In addition, we perform a basic installation of pwndoc-ng, meaning we won't describe how to patch som source code to add custom docx-templater expression filters. Sounds meaningless ?Continue reading if you want your brain to dismiss the fog.
-
-![alt text](image-14.png)
-
-You can then access the application at <https://localhost:8443> :
-
-![alt text](image-15.png)
-
-Accept the security risk; you are now rewarded with the first time use GUI. Notice that the application won't work with Firefox on Ubuntu, so we switched to the Chrome browser.
-
-![alt text](image-16.png)
-
-### Cloud-based Ubuntu Virtual Machine
-
-Having a pwndoc-ng instance running on your local pentesting machine can be cool, but you certainly want to be able to collaborate. What other great way than popping a Virtual Machine to do so?
-
-You must restrict the access to the running instance for obvious security reasons. You don't want this guy from hostile part of the world accessing precious data. Nothing dumber than a security related product without security enforced.
-
-#### Azure-based Virtual Machine
-
-Refer to the official Microsoft documentation to create an Ubuntu VM. We use a 2 vCPU with 8 Go RAM
-and it worked just fine.
-
-#### AWS-based Virtual Machine
-
-Refer to the official AWS documentation to create an Ubuntu VM. We use a 2 vCPU with 8 Go RAM
-and it worked just fine. (yeah, copy-paste)
+Should work for any Ubuntu underlying platform, be it a local Virtual Machine or a cloud-based one.
 
 ### Cloning the pwndoc-ng repository
 
@@ -163,17 +130,58 @@ pop up, well, I don't know, maybe try to install git:
 sudo apt-get update && sudo apt-get install git
 ```
 
-Typing the following command will build an d run the containers.
+Typing the following command will build an d run the containers:
 
 ```bash
 cd /app/pwndoc-ng && sudo docker-compose up -d --build
 ```
 
+### Ubuntu Virtual Machine
+
+Repeat after me : redundancy in a book is boring and unappealing, that's why I document the installation of pwndoc-ng on an Ubuntu Virtual Machine using Virtual Box on a Windows 11 Professional. The one who shout "Hyper-V" must eat a rotten stone.
+
+Joke aside, I need some screenshots of the whole process of installing pwndoc-ng, and fire-up an instance in a Virtual Machine is the way I found to provide you with pictures.
+
+After having downloaded and installed Virtual Box and create an Ubuntu Virtual Machine, we followed the step aforementioned :
+
+- create a folder layout
+- install the docker engine and docker-compose
+- change to the `/app` directory and clone the pwndoc-ng repository
+- build and run the containers
+
+We perform a basic installation of pwndoc-ng, meaning we won't describe how to patch some source code to add custom docx-templater expression filters. Sounds meaningless ?Continue reading if you want your brain to dismiss the fog.
+
+![alt text](image-14.png)
+
+You can then access the application at <https://localhost:8443> :
+
+![alt text](image-15.png)
+
+Accept the security risk; you are now rewarded with the first time use GUI. Notice that the application won't work with Firefox on Ubuntu, so we switched to the Chrome browser.
+
+![alt text](image-16.png)
+
+### Cloud-based Ubuntu Virtual Machine
+
+Having a pwndoc-ng instance running on your local pentesting machine can be cool, but you certainly want to be able to collaborate. What other great way than popping a Virtual Machine to do so?
+
+You must restrict the access to the running instance for obvious security reasons. You don't want this guy from hostile part of the world accessing precious data. Nothing dumber than a security related product without security enforced.
+
+#### Azure-based Virtual Machine
+
+Refer to the official Microsoft documentation to create an Ubuntu VM. We use a 2 vCPU with 8 Go RAM
+and it worked just fine.
+
+#### AWS-based Virtual Machine
+
+Refer to the official AWS documentation to create an Ubuntu VM. We use a 2 vCPU with 8 Go RAM
+and it worked just fine. (yeah, copy-paste)
+
 ## pwndoc-ng configuration
 
 ### Caveat
 
-If you ant to use our custom charts described later, do not forget to patch the file `pwndoc-ng/backend/src/lib/report-generator.js` by appending the file you can find at <https://gist.githubusercontent.com/p4r4bellum/c333102c9356d41a6eb97038eb9bad32/raw/ec0375883975ec096a358e7de98c5cc61f6dd7eb/fruisek-pwndoc-patch.js>
+If you ant to use our custom charts filter described later, do not forget to patch the file `pwndoc-ng/backend/src/lib/report-generator.js` by appending the file you can find at <https://gist.githubusercontent.com/p4r4bellum/c333102c9356d41a6eb97038eb9bad32/raw/ec0375883975ec096a358e7de98c5cc61f6dd7eb/fruisek-pwndoc-patch.js>
 
 ```bash
 curl -L https://gist.githubusercontent.com/p4r4bellum/c333102c9356d41a6eb97038eb9bad32/raw/ec0375883975ec096a358e7de98c5cc61f6dd7eb/fruisek-pwndoc-patch.js -o /tmp/patch.js
@@ -430,9 +438,7 @@ By copying these files, you let the NodeJS runtime handle SSL, which may not be 
 
 Nonetheless, you can use your own certificate by performing the following steps:
 
-1. one
-2. two
-3. three
+TODO
 
 ### Custom JWT Secret
 
@@ -526,6 +532,8 @@ The command `sudo docker run --rm -v pwndoc-ng_mongo-data:/_data -v /tmp:/backup
 - `tar cvf /backup/pwndoc-db_backup.tar /_data` : create (c) a verbose (v) archive file (f) named `pwndoc-db_backup.tar` inside `/backup` (host `/tmp`), containing the contents of `/_data` (MongoDB volume).
 
 Of  course, you have to use the proper name of your backup archive.
+
+TODO : something wrong happened when restoring the data
 
 #### Crontabbing the backup
 
